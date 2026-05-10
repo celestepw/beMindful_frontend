@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+
+import ExerciseListe from '@/components/ExerciseListe.vue'
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <h1>beMindful</h1>
+    <p>Daily breathing exercises</p>
+    <ExerciseListe title="Atemübung" />
   </main>
+
 </template>
