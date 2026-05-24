@@ -1,38 +1,29 @@
+<style scoped>
+</style>
+
 <script setup lang="ts">
 
-defineProps<{
-  title: string
-}>()
+import { onMounted, type Ref, ref } from 'vue'
+import type { Exercise } from "@/types.ts";
 
-type Exercise = {
-  id: number
-  name: string
-  duration: number
+const items: Ref<Exercise[]> = ref([])
+
+async function loadThings() {
+  const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL
+  const endpoint = baseUrl + '/activities'
+  const requestOptions: RequestInit = {
+    method: 'GET',
+    redirect: 'follow'
+  }
+  fetch(endpoint, requestOptions)
+    .then(response => response.json())
+    .then(result => result.forEach((activities: Exercise) => {
+      items.value.push(activities)
+    }))
+    .catch(error => console.log('error', error))
 }
 
-const items : Exercise[] = [
-  { id: 1, name: 'Einatmen', duration: 4 },
-  { id: 2, name: 'Halten', duration: 5 },
-  { id: 3, name: 'Ausatmen', duration: 7 }
-]
-
-
+onMounted(() => {
+  loadThings()
+})
 </script>
-
-<template>
-  <div>
-    <h2>{{ title }}</h2>
-    <table>
-      <tbody>
-      <tr v-for="item in items" :key="item.id">
-        <td>{{ item.name }}</td>
-        <td>{{ item.duration }} Sekunden</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
-
-<style scoped>
-
-</style>
