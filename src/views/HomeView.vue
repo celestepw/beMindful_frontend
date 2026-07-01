@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import DailyQuote from '@/components/DailyQuote.vue'
 import BreathingExercise from '@/components/BreathingExercise.vue'
 import ActivityForm from '@/components/ActivityForm.vue'
 import Journal from '@/components/Journal.vue'
@@ -16,6 +17,8 @@ onMounted(() => {
 
 <template>
   <main class="home">
+    <DailyQuote />
+
     <section class="hero">
       <h1>beMindful</h1>
       <p>Tägliche Atemübungen für mehr Ruhe und Achtsamkeit.</p>
