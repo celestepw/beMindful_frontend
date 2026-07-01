@@ -4,4 +4,5 @@ export interface Exercise {
   mood: string
   done: boolean
   date: string
+  note?: string
 }

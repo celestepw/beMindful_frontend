@@ -1,83 +1,79 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { authState, logout } from './auth'
+
+const router = useRouter()
+
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-
+  <div class="app">
+    <header class="topbar">
+      <RouterLink to="/" class="brand">🧘 beMindful</RouterLink>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <template v-if="authState.isAuthenticated">
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">Über</RouterLink>
+          <button class="logout-btn" @click="handleLogout">Abmelden</button>
+        </template>
+        <template v-else>
+          <RouterLink to="/login">Login</RouterLink>
+          <RouterLink to="/register">Registrieren</RouterLink>
+        </template>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <RouterView />
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-heading);
 }
-
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
 nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  color: var(--color-text);
+  transition: background 0.2s;
 }
-
-nav a:first-of-type {
-  border: 0;
+nav a:hover {
+  background: var(--surface-soft);
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+nav a.router-link-exact-active {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+.logout-btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: none;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: inherit;
+  transition: background 0.2s;
+}
+.logout-btn:hover {
+  background: var(--surface-soft);
 }
 </style>
