@@ -5,31 +5,52 @@
     <section class="card">
       <h1>Über beMindful</h1>
       <p>
-        beMindful hilft dir, mit kurzen, geführten Atemübungen zur Ruhe zu kommen und deine
-        Achtsamkeits-Routine aufzubauen.
+        beMindful ist dein kleiner Begleiter für mehr Ruhe im Alltag. Zwischen Uni, Arbeit und
+        vielen Aufgaben bleibt Achtsamkeit oft auf der Strecke. Mit kurzen, geführten Atemübungen
+        holst du dir jederzeit einen Moment zum Durchatmen zurück.
+      </p>
+      <p>
+        Die Idee dahinter ist einfach: Schon wenige bewusste Atemzüge am Tag können helfen, Stress
+        abzubauen, klarer zu denken und besser zu schlafen. beMindful macht daraus eine leichte
+        tägliche Gewohnheit.
+      </p>
+
+      <h2>Dein Bäumchen</h2>
+      <p>
+        Dein Fortschritt bekommt ein Gesicht in Form eines kleinen Bäumchens. Solange du heute noch
+        nicht geübt hast, schläft es. Sobald du deine Atemübung machst, wird es gegossen, wacht auf
+        und strahlt wieder. So siehst du auf einen Blick, ob du dir heute schon deinen Moment
+        genommen hast.
+      </p>
+
+      <h2>Journal</h2>
+      <p>
+        Nach jeder Übung hältst du deine Stimmung fest, und im Journal kannst du für jeden Tag ein
+        paar Gedanken notieren. Später blätterst du durch vergangene Tage oder filterst nach
+        Stimmung, um nachzulesen, wie es dir ging.
       </p>
 
       <h2>Atemmuster</h2>
       <ul class="patterns">
         <li>
-          <strong>Ruhig 4-6</strong> – Einatmen 4 s, Ausatmen 6 s. Ideal für einen schnellen Moment
-          der Entspannung.
+          <strong>Sanfte Ruhe</strong>: Einatmen 4 Sekunden, Ausatmen 6 Sekunden. Ideal für einen
+          schnellen Moment der Entspannung.
         </li>
         <li>
-          <strong>4-7-8 Entspannung</strong> – Einatmen 4 s, Halten 7 s, Ausatmen 8 s. Hilft beim
+          <strong>Tiefe Entspannung</strong>: Einatmen 4, Halten 7, Ausatmen 8 Sekunden. Hilft beim
           Runterkommen und Einschlafen.
         </li>
         <li>
-          <strong>Box Breathing</strong> – je 4 s einatmen, halten, ausatmen, halten. Für Fokus und
-          Stressabbau.
+          <strong>Klarer Fokus</strong>: jeweils 4 Sekunden einatmen, halten, ausatmen und halten.
+          Gut für Konzentration und Stressabbau.
         </li>
       </ul>
 
-      <h2>So funktioniert's</h2>
+      <h2>So funktioniert es</h2>
       <ol>
-        <li>Muster und Anzahl der Zyklen wählen.</li>
-        <li>Auf „Starten“ tippen und dem atmenden Kreis folgen.</li>
-        <li>Nach der Übung deine Stimmung festhalten – so wächst dein Streak. 🔥</li>
+        <li>Wähle ein Atemmuster und die Anzahl der Zyklen.</li>
+        <li>Tippe auf „Starten“ und folge dem Atemball, der größer und kleiner wird.</li>
+        <li>Halte danach deine Stimmung fest und sieh zu, wie dein Bäumchen aufwacht.</li>
       </ol>
     </section>
   </main>

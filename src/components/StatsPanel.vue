@@ -5,16 +5,6 @@ import { moodEmoji } from '@/moods'
 
 const { items, streak } = useActivities()
 
-const total = computed(() => items.value.length)
-
-const todayCount = computed(() => {
-  const today = new Date().toDateString()
-  return items.value.filter((i) => {
-    const d = new Date(i.date)
-    return !isNaN(d.getTime()) && d.toDateString() === today
-  }).length
-})
-
 const moodStats = computed<[string, number][]>(() => {
   const map = new Map<string, number>()
   for (const i of items.value) {
@@ -33,14 +23,6 @@ const maxMood = computed(() => Math.max(1, ...moodStats.value.map(([, c]) => c))
       <div class="kpi">
         <span class="kpi-num">🔥 {{ streak }}</span>
         <span class="kpi-label">Streak (Tage)</span>
-      </div>
-      <div class="kpi">
-        <span class="kpi-num">{{ total }}</span>
-        <span class="kpi-label">Einträge gesamt</span>
-      </div>
-      <div class="kpi">
-        <span class="kpi-num">{{ todayCount }}</span>
-        <span class="kpi-label">Heute</span>
       </div>
     </div>
 

@@ -30,6 +30,30 @@
   --section-gap: 160px;
 }
 
+/* Dark Mode (wird per Klasse am <html> aktiviert) */
+:root.dark {
+  --color-background: #16201d;
+  --color-background-soft: #1f2b28;
+  --color-background-mute: #283531;
+  --surface: #202b28;
+  --surface-soft: #263330;
+
+  --color-border: #33443f;
+  --color-border-hover: #46584f;
+  --border: #33443f;
+
+  --color-heading: #eaf2ef;
+  --color-text: #cdd8d4;
+  --text-soft: #93a39d;
+
+  --primary: #45c9ae;
+  --primary-soft: #24443f;
+  --primary-strong: #74e2ca;
+  --danger: #e88a7e;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
 *,
 *::before,
 *::after {

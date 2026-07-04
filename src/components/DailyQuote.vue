@@ -27,38 +27,64 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="quote-card">
+  <section v-if="loading || quote" class="quote">
     <p v-if="loading" class="quote-loading">Tagesmotto wird geladen…</p>
     <template v-else-if="quote">
-      <p class="quote-text">„{{ quote.q }}"</p>
+      <span class="quote-mark quote-mark-open" aria-hidden="true">“</span>
+      <p class="quote-text">{{ quote.q }}</p>
       <p class="quote-author">— {{ quote.a }}</p>
+      <span class="quote-mark quote-mark-close" aria-hidden="true">“</span>
     </template>
   </section>
 </template>
 
 <style scoped>
-.quote-card {
-  background: var(--surface-soft);
+.quote {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 1.75rem;
+  padding: 1.9rem 2.25rem 1.6rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary-soft), var(--surface));
   border: 1px solid var(--color-border);
-  border-left: 4px solid var(--primary);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.quote-mark {
+  position: absolute;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--primary);
+  opacity: 0.18;
+}
+.quote-mark-open {
+  top: -0.4rem;
+  left: 1.1rem;
+}
+.quote-mark-close {
+  bottom: -0.4rem;
+  right: 1.1rem;
+  transform: rotate(180deg);
+}
+.quote-text {
+  position: relative;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.55;
+  color: var(--color-heading);
+}
+.quote-author {
+  margin-top: 0.75rem;
+  color: var(--primary-strong);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
 }
 .quote-loading {
   color: var(--text-soft);
   font-style: italic;
-}
-.quote-text {
-  font-style: italic;
-  color: var(--color-heading);
-  font-size: 1.05rem;
-  line-height: 1.5;
-}
-.quote-author {
-  text-align: right;
-  color: var(--text-soft);
-  font-size: 0.9rem;
-  margin-top: 0.4rem;
 }
 </style>

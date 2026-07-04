@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { authState, logout } from './auth'
+import BrandLogo from './components/BrandLogo.vue'
+import CloudsBackground from './components/CloudsBackground.vue'
 
 const router = useRouter()
 
@@ -12,12 +14,15 @@ function handleLogout() {
 
 <template>
   <div class="app">
+    <CloudsBackground />
+
     <header class="topbar">
-      <RouterLink to="/" class="brand">🧘 beMindful</RouterLink>
+      <RouterLink to="/" class="brand"><BrandLogo /></RouterLink>
       <nav>
         <template v-if="authState.isAuthenticated">
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/about">Über</RouterLink>
+          <RouterLink to="/profile">Profil</RouterLink>
           <button class="logout-btn" @click="handleLogout">Abmelden</button>
         </template>
         <template v-else>
@@ -28,6 +33,11 @@ function handleLogout() {
     </header>
 
     <RouterView />
+
+    <footer class="app-footer">
+      <RouterLink to="/impressum">Impressum</RouterLink>
+      <span>· beMindful · HTW Berlin</span>
+    </footer>
   </div>
 </template>
 
@@ -75,5 +85,23 @@ nav a.router-link-exact-active {
 }
 .logout-btn:hover {
   background: var(--surface-soft);
+}
+.app-footer {
+  margin-top: 2.5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+.app-footer a {
+  color: var(--text-soft);
+  text-decoration: underline;
+}
+.app-footer a:hover {
+  color: var(--primary-strong);
+}
+.app-footer span {
+  margin-left: 0.4rem;
 }
 </style>

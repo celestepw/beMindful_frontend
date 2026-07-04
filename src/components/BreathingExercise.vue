@@ -2,56 +2,36 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { useActivities } from '@/composables/useActivities'
 import { MOODS } from '@/moods'
+import GrowingTree from './GrowingTree.vue'
+import {
+  breathingPatterns,
+  type BreathingPattern as Pattern,
+  type BreathingPhase as Phase,
+} from '@/breathingPatterns'
+import { preferences } from '@/preferences'
 
-interface Phase {
-  name: string
-  seconds: number
-  scale: number
+const { addActivity, items } = useActivities()
+
+function sameDay(iso: string, day: Date): boolean {
+  const d = new Date(iso)
+  return (
+    !isNaN(d.getTime()) &&
+    d.getFullYear() === day.getFullYear() &&
+    d.getMonth() === day.getMonth() &&
+    d.getDate() === day.getDate()
+  )
 }
-interface Pattern {
-  id: string
-  name: string
-  hint: string
-  phases: [Phase, ...Phase[]]
-}
+// Nur echte Atemübungen zählen (Journaleinträge ausgenommen).
+const doneToday = computed(() =>
+  items.value.some((i) => i.title !== 'Tagebuch' && sameDay(i.date, new Date())),
+)
 
-const { addActivity } = useActivities()
+const patterns = breathingPatterns
 
-const patterns: [Pattern, ...Pattern[]] = [
-  {
-    id: 'calm',
-    name: 'Ruhig 4-6',
-    hint: 'Einatmen 4s · Ausatmen 6s',
-    phases: [
-      { name: 'Einatmen', seconds: 4, scale: 1 },
-      { name: 'Ausatmen', seconds: 6, scale: 0.5 },
-    ],
-  },
-  {
-    id: '478',
-    name: '4-7-8 Entspannung',
-    hint: 'Einatmen 4s · Halten 7s · Ausatmen 8s',
-    phases: [
-      { name: 'Einatmen', seconds: 4, scale: 1 },
-      { name: 'Halten', seconds: 7, scale: 1 },
-      { name: 'Ausatmen', seconds: 8, scale: 0.5 },
-    ],
-  },
-  {
-    id: 'box',
-    name: 'Box Breathing',
-    hint: 'Ein 4s · Halten 4s · Aus 4s · Halten 4s',
-    phases: [
-      { name: 'Einatmen', seconds: 4, scale: 1 },
-      { name: 'Halten', seconds: 4, scale: 1 },
-      { name: 'Ausatmen', seconds: 4, scale: 0.5 },
-      { name: 'Halten', seconds: 4, scale: 0.5 },
-    ],
-  },
-]
-
-const selectedId = ref(patterns[0].id)
-const cyclesTotal = ref(3)
+const selectedId = ref(
+  patterns.find((p) => p.id === preferences.defaultPattern)?.id ?? patterns[0].id,
+)
+const cyclesTotal = ref(preferences.defaultCycles)
 
 const running = ref(false)
 const finished = ref(false)
@@ -85,6 +65,10 @@ const totalLabel = computed(() => {
   if (m > 0) return `${m} min${s > 0 ? ' ' + s + ' s' : ''}`
   return `${s} s`
 })
+
+const health = computed(() => (finished.value || doneToday.value ? 1 : 0))
+// Der Baum wird NACH der Übung beregnet (nicht währenddessen).
+const raining = computed(() => finished.value)
 
 function clearTimer() {
   if (timer) {
@@ -131,16 +115,12 @@ function stop() {
   clearTimer()
   running.value = false
   finished.value = false
-  circleScale.value = 0.5
-  transitionSeconds.value = 1
 }
 
 function finish() {
   clearTimer()
   running.value = false
   finished.value = true
-  circleScale.value = 0.5
-  transitionSeconds.value = 1
 }
 
 async function logMood(mood: string) {
@@ -190,17 +170,22 @@ onUnmounted(clearTimer)
       </div>
     </div>
 
-    <!-- Atem-Animation -->
+    <!-- Während der Übung: Atemball als Taktgeber. Danach: schlafender Baum wird beregnet & wacht auf. -->
     <div class="stage">
-      <div
-        class="circle"
-        :style="{ transform: `scale(${circleScale})`, transitionDuration: `${transitionSeconds}s` }"
-      ></div>
-      <div class="stage-text">
-        <div class="phase">{{ phaseLabel }}</div>
-        <div v-if="running" class="count">{{ secondsLeft }}</div>
-        <div v-if="running" class="cycle">Zyklus {{ currentCycle }} / {{ cyclesTotal }}</div>
-      </div>
+      <template v-if="running">
+        <div class="ball-wrap">
+          <div
+            class="ball"
+            :style="{ transform: `scale(${circleScale})`, transitionDuration: `${transitionSeconds}s` }"
+          ></div>
+          <div class="ball-text">
+            <div class="phase">{{ phaseLabel }}</div>
+            <div class="count">{{ secondsLeft }}</div>
+            <div class="cycle">Zyklus {{ currentCycle }} / {{ cyclesTotal }}</div>
+          </div>
+        </div>
+      </template>
+      <GrowingTree v-else :health="health" :raining="raining" />
     </div>
 
     <!-- Steuerung -->
@@ -228,23 +213,30 @@ onUnmounted(clearTimer)
 
 <style scoped>
 .stage {
-  position: relative;
-  height: 260px;
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0.5rem 0 1rem;
+  margin: 0.5rem 0 0.25rem;
 }
-.circle {
-  width: 180px;
-  height: 180px;
+.ball-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ball {
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, var(--primary-soft), var(--primary));
   box-shadow: 0 10px 40px rgba(47, 158, 143, 0.25);
   transition-property: transform;
   transition-timing-function: ease-in-out;
 }
-.stage-text {
+.ball-text {
   position: absolute;
   inset: 0;
   display: flex;
@@ -253,18 +245,18 @@ onUnmounted(clearTimer)
   justify-content: center;
   pointer-events: none;
 }
-.phase {
-  font-size: 1.3rem;
+.ball-text .phase {
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-heading);
 }
-.count {
-  font-size: 2.4rem;
+.ball-text .count {
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--primary-strong);
   line-height: 1.1;
 }
-.cycle {
+.ball-text .cycle {
   font-size: 0.85rem;
   color: var(--text-soft);
 }
