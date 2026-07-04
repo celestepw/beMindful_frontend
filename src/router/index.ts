@@ -42,12 +42,11 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   if (to.meta.requiresAuth && !authState.isAuthenticated) {
-    next('/login')
-  } else {
-    next()
+    return '/login'
   }
+  // nichts zurückgeben = Navigation erlauben
 })
 
 export default router

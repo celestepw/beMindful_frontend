@@ -2,7 +2,7 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { useActivities } from '@/composables/useActivities'
 import { MOODS } from '@/moods'
-import GrowingTree from './GrowingTree.vue'
+import MoodTree from './MoodTree.vue'
 import {
   breathingPatterns,
   type BreathingPattern as Pattern,
@@ -185,7 +185,7 @@ onUnmounted(clearTimer)
           </div>
         </div>
       </template>
-      <GrowingTree v-else :health="health" :raining="raining" />
+      <MoodTree v-else :health="health" :raining="raining" />
     </div>
 
     <!-- Steuerung -->
