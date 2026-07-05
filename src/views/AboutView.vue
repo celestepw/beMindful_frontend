@@ -30,6 +30,18 @@
         Stimmung, um nachzulesen, wie es dir ging.
       </p>
 
+      <h2>Dein Streak</h2>
+      <p>
+        Der Streak zeigt, wie viele Tage am Stück du bei beMindful aktiv warst. Jeder Tag, an dem
+        du eine Atemübung abschließt oder einen Journaleintrag speicherst, zählt mit. Machst du an
+        einem Tag beides, zählt der Tag trotzdem ganz normal.
+      </p>
+      <p>
+        Legst du einen Tag Pause ein, beginnt der Streak wieder von vorn. Es geht also nicht um
+        Perfektion, sondern darum, kleine Momente der Ruhe zu einer regelmäßigen Gewohnheit werden
+        zu lassen.
+      </p>
+
       <h2>Atemmuster</h2>
       <ul class="patterns">
         <li>
@@ -50,7 +62,10 @@
       <ol>
         <li>Wähle ein Atemmuster und die Anzahl der Zyklen.</li>
         <li>Tippe auf „Starten“ und folge dem Atemball, der größer und kleiner wird.</li>
-        <li>Halte danach deine Stimmung fest und sieh zu, wie dein Bäumchen aufwacht.</li>
+        <li>
+          Halte danach deine Stimmung fest und sieh zu, wie dein Bäumchen aufwacht und dein Streak
+          um einen Tag wächst.
+        </li>
       </ol>
     </section>
   </main>

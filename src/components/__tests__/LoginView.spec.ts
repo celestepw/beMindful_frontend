@@ -2,10 +2,14 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { shallowMount, flushPromises } from '@vue/test-utils'
 import LoginView from '@/views/LoginView.vue'
 
+// push-Mock hoisten, damit er innerhalb der vi.mock-Factory nutzbar ist
+// und wir im Test prüfen können, wohin navigiert wurde.
+const { pushMock } = vi.hoisted(() => ({ pushMock: vi.fn() }))
+
 // useRouter() wird in LoginView aufgerufen – hier mocken, damit kein echter
 // Router installiert werden muss.
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: pushMock }),
 }))
 
 describe('LoginView', () => {
@@ -46,5 +50,15 @@ describe('LoginView', () => {
 
     expect(wrapper.find('.error').exists()).toBe(true)
     expect(wrapper.find('.error').text()).toBe('Falsche Zugangsdaten')
+  })
+
+  it('leitet nach erfolgreichem Login zur Startseite weiter', async () => {
+    const wrapper = shallowMount(LoginView)
+    await wrapper.find('#username').setValue('celeste')
+    await wrapper.find('#password').setValue('geheim')
+    await wrapper.find('form').trigger('submit')
+    await flushPromises()
+
+    expect(pushMock).toHaveBeenCalledWith('/')
   })
 })

@@ -10,7 +10,7 @@ import {
 } from '@/breathingPatterns'
 import { preferences } from '@/preferences'
 
-const { addActivity, items } = useActivities()
+const { addActivity, updateActivity, items } = useActivities()
 
 function sameDay(iso: string, day: Date): boolean {
   const d = new Date(iso)
@@ -37,6 +37,7 @@ const running = ref(false)
 const finished = ref(false)
 const justLogged = ref(false)
 const saveError = ref(false)
+const savedId = ref<number | null>(null)
 const currentCycle = ref(0)
 const phaseIndex = ref(0)
 const secondsLeft = ref(0)
@@ -105,6 +106,7 @@ function start() {
   finished.value = false
   justLogged.value = false
   saveError.value = false
+  savedId.value = null
   running.value = true
   currentCycle.value = 1
   enterPhase(0)
@@ -117,20 +119,36 @@ function stop() {
   finished.value = false
 }
 
-function finish() {
+async function finish() {
   clearTimer()
   running.value = false
   finished.value = true
+  saveError.value = false
+  savedId.value = null
+  // Übung wird immer gespeichert (zählt für Streak & Baum); Stimmung ist optional.
+  try {
+    const saved = await addActivity({
+      title: `${selectedPattern.value.name} · ${cyclesTotal.value} Zyklen`,
+      mood: '',
+      done: true,
+    })
+    savedId.value = saved.id
+  } catch (e) {
+    console.error(e)
+    saveError.value = true
+  }
 }
 
 async function logMood(mood: string) {
   saveError.value = false
+  const title = `${selectedPattern.value.name} · ${cyclesTotal.value} Zyklen`
   try {
-    await addActivity({
-      title: `${selectedPattern.value.name} · ${cyclesTotal.value} Zyklen`,
-      mood,
-      done: true,
-    })
+    if (savedId.value != null) {
+      // Stimmung zum bereits gespeicherten Übungs-Eintrag ergänzen.
+      await updateActivity(savedId.value, { title, mood, done: true })
+    } else {
+      await addActivity({ title, mood, done: true })
+    }
     finished.value = false
     justLogged.value = true
   } catch (e) {
@@ -203,7 +221,7 @@ onUnmounted(clearTimer)
           <span>{{ m.label }}</span>
         </button>
       </div>
-      <button class="link" @click="stop">Ohne Eintrag schließen</button>
+      <button class="link" @click="stop">Ohne Stimmung schließen</button>
       <p v-if="saveError" class="error">Konnte nicht gespeichert werden – läuft das Backend?</p>
     </div>
 
